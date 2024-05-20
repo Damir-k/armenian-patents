@@ -52,12 +52,13 @@ def generate_fmads():
             fmads.append(str(i).zfill(2) + '-' + str(j).zfill(2))
     return fmads
 
-def main():
+def download_all_ids():
     certificate_ids = {
         "parsing_date": datetime.date.today().isoformat(),
         "entries": 0,
         "overviews": []
     }
+
     for fmad in tqdm(generate_fmads()):
         overview = get_overview_by_fmad(fmad, 'en')
         if overview['data']:
@@ -66,8 +67,14 @@ def main():
 
     with open("./data/en/data.json", "w", encoding='utf-8') as f:
         f.write(json.dumps(certificate_ids, ensure_ascii=False))
-        
 
+def main():
+    print("What do you want to do?\n1: Download all certificate ids with links to the patents")
+    match int(input):
+        case 1:
+            download_all_ids()
+        case _:
+            print("No such option")
 
 
 if __name__ == "__main__":
