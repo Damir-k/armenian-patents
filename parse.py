@@ -3,13 +3,16 @@ from bs4 import BeautifulSoup
 import itertools
 import json
 
-def main():
+def get_table_by_fmad(fmad='01-01', lang='en'):
+    if lang not in ['en', 'ru', 'hy']:
+        raise Exception("Tried to request a table in non-supported language. Use 'en', 'ru' or 'hy'.")
+
     response = requests.request(
         'post',
-        'https://aipo.am/en//ajax/search_mods_search_int_classification',
+        'https://aipo.am/' + lang + '//ajax/search_mods_search_int_classification',
         data={
             'logic': 'partial',
-            'FMAD': '01-01',
+            'FMAD': fmad,
 
             'Reg_num':'',
             'App_num':'',
@@ -20,9 +23,15 @@ def main():
             'Owner':''
         }
     )
-    with open("test.html", "w") as f:
-        f.write(response.text)
-    
+    return response
+
+
+
+
+def main():
+    response = get_table_by_fmad("01-01", lang="en")
+    # with open("test.html", "w") as f:
+    #     f.write(response.text)
     soup = BeautifulSoup(response.text, features="html.parser")
     
     overview = {
@@ -36,8 +45,8 @@ def main():
             "title": title.get_text(),
             "patent_link": 'https://old.aipa.am/search_mods/industrial_design/view_item.php?id=' + certificate_id.get_text() + '&language=en'
         })
-    with open("./data/en/data.json", "w") as f:
-        f.write(json.dumps(overview))
+    with open("./data/en/data.json", "w", encoding='utf-8') as f:
+        f.write(json.dumps(overview, ensure_ascii=False))
         
 
 
