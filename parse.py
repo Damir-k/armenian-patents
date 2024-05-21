@@ -69,7 +69,6 @@ def fix_patents_list(downloaded_patents : list, languge : str):
     downloaded_patents.sort(key = lambda patent: patent["certificate_id"])
     progress = tqdm(
         enumerate(downloaded_patents, start=1), 
-        bar_format='{lbar}{bar:20}{r_bar}', 
         total=downloaded_patents[-1]["certificate_id"]
     )
     for (i, patent) in progress:
