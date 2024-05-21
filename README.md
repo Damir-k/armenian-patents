@@ -43,4 +43,4 @@ All of them can be found [there](https://locpub.wipo.int/enfr/?class_number=1&ex
 
 ## Collaboration
 If somebody for some reason wants to contribute to this mess, feel free to fork this repo.
-This project is under an MIT license, so feel free to use it as you wish
+This project is under an MIT license, so use it as you wish
