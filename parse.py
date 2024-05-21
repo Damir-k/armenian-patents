@@ -86,7 +86,14 @@ def fix_patents_list(downloaded_patents : list, languge : str):
             progress.set_description(f"Dublicate id={i}")
             downloaded_patents.pop(i - 1)
     
+    # try to download past the upper boundary
+    new_id = downloaded_patents[-1]["certificate_id"] + 1
+    while attempt := get_patent_by_id(id=new_id, language=languge):
+        downloaded_patents.append(attempt)
+        new_id += 1
+    
     print("Confirming every id is downloaded and unique... ", end="")
+    progress.reset()
     for (i, patent) in progress:
         next_certificate = patent["certificate_id"]
         if i != next_certificate:

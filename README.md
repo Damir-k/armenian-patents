@@ -37,7 +37,7 @@ All of them can be found [there](https://locpub.wipo.int/enfr/?class_number=1&ex
 3. `get_group_by_icid_code(...)` parses a request for specific ICID code to python nested `dict` object.
 4. `generate_icid_codes()` returns a generator for looping over ICID codes.
 5. `get_ICID_json(...)` requests patents for every ICID code and stores them in corresponding ICID.json file
-6. `fix_patents_list(...)` turns unordered list of patents with dublicates and missing entries to perfectly sorted list with unique entries without gaps.
+6. `fix_patents_list(...)` turns unordered list of patents with dublicates and missing entries to perfectly sorted list with unique entries without gaps. In theory should just download every patent one by one if empty array is passed, but I did not test.
 7. `get_all_patents(...)` gets a list of patents from ICID.json, then "fixes" it, stores it in corresponding patents.json file
 8. `main()` interacts with a user to safely run code
 
