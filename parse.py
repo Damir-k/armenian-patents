@@ -58,10 +58,12 @@ def get_group_by_icid_code(icid_code : str, language : str):
     return group
 
 def generate_icid_codes():
-    for i in range(33): # 32 - amount of classes in icids (mkpo, icid)
-        for j in range(17): # 16 - maximum second index in every class
-            yield str(i).zfill(2) + '-' + str(j).zfill(2)
-        yield str(i).zfill(2) + '-99' # a lot of classes have category 99
+    with open("./data/ICID codes.json") as f:
+        classes = json.load(f)["classes"]
+    
+    for icid_class in classes:
+        for subclass in classes[icid_class]:
+            yield icid_class + '-' + subclass
 
 def fix_patents_list(downloaded_patents : list, languge : str):
     downloaded_patents.sort(key = lambda patent: int(patent["certificate_id"]))
@@ -101,7 +103,7 @@ def get_ICID_json(language : str):
         "entries": 0,
         "icid_code_groups": []
     }
-    progress = tqdm(generate_icid_codes(), bar_format='{lbar}{bar:20}{r_bar}', total=17*33)
+    progress = tqdm(generate_icid_codes(), total=251)
     for icid_code in progress:
         progress.set_description(icid_code)
         group = get_group_by_icid_code(icid_code=icid_code, language=language)
@@ -109,7 +111,7 @@ def get_ICID_json(language : str):
             certificate_ids["entries"] += len(group["data"])
             certificate_ids['icid_code_groups'].append(group)
     
-    with open("./data/" + language + "/data.json", "w", encoding='utf-8') as f:
+    with open("./data/" + language + "/ICID.json", "w", encoding='utf-8') as f:
         f.write(json.dumps(certificate_ids, ensure_ascii=False))
 
 
