@@ -61,6 +61,7 @@ def generate_icid_codes():
     for i in range(33): # 32 - amount of classes in icids (mkpo, icid)
         for j in range(17): # 16 - maximum second index in every class
             yield str(i).zfill(2) + '-' + str(j).zfill(2)
+        yield str(i).zfill(2) + '-99' # a lot of classes have category 99
 
 def fix_patents_list(downloaded_patents : list, languge : str):
     downloaded_patents.sort(key = lambda patent: int(patent["certificate_id"]))
