@@ -70,11 +70,27 @@ def download_all_ids():
 
 def main():
     print("What do you want to do?\n1: Download all certificate ids with links to the patents")
-    match int(input):
+    match int(input()):
         case 1:
             download_all_ids()
         case _:
             print("No such option")
+    
+    with open("./data/en/data.json", "r", encoding="utf-8") as f:
+        data = json.load(f)
+    
+    patents = {
+        "parsing_date": data["parsing_date"],
+        "patents": []
+    }
+    for overview in data["overviews"]:
+        for patent in overview["data"]:
+            patents["patents"].append(patent)
+    
+    patents["patents"].sort(key = lambda patent: int(patent["certificate_id"]))
+    with open("test.json", "w", encoding="utf-8") as f:
+        json.dump(patents, f, ensure_ascii=False)
+    
 
 
 if __name__ == "__main__":
