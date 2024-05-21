@@ -4,7 +4,7 @@ This project is dedicated to [@opendataam](https://github.com/opendataam) team, 
 It's actively in development, so expect things to break and information below to be wrong.
 
 ## Setup
-Virtual environment is planned, but not supported right now, so you will need an environment which supports these dependencies:
+Virtual environment is planned, but not supported right now, so you will need an environment which supports these dependencies, with python version being at least 3.10 (3.12 is recommended):
 ```python3
 import itertools
 import json
