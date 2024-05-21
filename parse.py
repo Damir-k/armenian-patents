@@ -112,8 +112,7 @@ def get_ICID_json(language : str):
             content['icid_code_groups'].append(group)
     
     with open("./data/" + language + "/ICID.json", "w", encoding='utf-8') as f:
-        f.write(json.dumps(content, ensure_ascii=False))
-
+        f.write(json.dumps(content, ensure_ascii=False, indent=4))
 
 def get_all_patents(language : str):
     path = "./data/" + language + "/"
@@ -140,7 +139,7 @@ def get_all_patents(language : str):
     print(f"In total: {all_patents[-1]["certificate_id"]} unique patents")
 
     with open(path + "patents.json", "w", encoding='utf-8') as f:
-        f.write(json.dumps(all_patents, ensure_ascii=False))
+        f.write(json.dumps(all_patents, ensure_ascii=False, indent=4))
 
 def main():
     print("Select language (default = en) [ en | ru | hy | all ]")
