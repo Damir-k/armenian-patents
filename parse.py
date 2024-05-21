@@ -32,8 +32,8 @@ def get_patent_by_id(id : int, language : str) -> dict:
         return dict()
     
     return {
-        "certificate_id": certificate_id.get_text(),
-        "application_id": application_id.get_text(),
+        "certificate_id": int(certificate_id.get_text()),
+        "application_id": int(application_id.get_text()),
         "title": title.get_text(),
         "patent_link": 'https://old.aipa.am/search_mods/industrial_design/view_item.php?id=' + \
             certificate_id.get_text() + '&language=' + language
@@ -49,8 +49,8 @@ def get_group_by_icid_code(icid_code : str, language : str):
     }
     for (application_id, title, certificate_id) in itertools.batched(soup.find_all("td"), n=3):
         group['data'].append({
-            "certificate_id": certificate_id.get_text(),
-            "application_id": application_id.get_text(),
+            "certificate_id": int(certificate_id.get_text()),
+            "application_id": int(application_id.get_text()),
             "title": title.get_text(),
             "patent_link": 'https://old.aipa.am/search_mods/industrial_design/view_item.php?id=' + \
                 certificate_id.get_text() + '&language=' + language
@@ -66,14 +66,14 @@ def generate_icid_codes():
             yield icid_class + '-' + subclass
 
 def fix_patents_list(downloaded_patents : list, languge : str):
-    downloaded_patents.sort(key = lambda patent: int(patent["certificate_id"]))
+    downloaded_patents.sort(key = lambda patent: patent["certificate_id"])
     progress = tqdm(
         enumerate(downloaded_patents, start=1), 
         bar_format='{lbar}{bar:20}{r_bar}', 
-        total=int(downloaded_patents[-1]["certificate_id"])
+        total=downloaded_patents[-1]["certificate_id"]
     )
     for (i, patent) in progress:
-        next_certificate = int(patent["certificate_id"])
+        next_certificate = patent["certificate_id"]
         if i == next_certificate:
             progress.set_description(f"Correct id={i}")
             continue
@@ -83,13 +83,13 @@ def fix_patents_list(downloaded_patents : list, languge : str):
             downloaded_patents.insert(i - 1, missing)
             i += 1
             continue
-        while i > int(downloaded_patents[i-1]["certificate_id"]):
+        while i > downloaded_patents[i-1]["certificate_id"]:
             progress.set_description(f"Dublicate id={i}")
             downloaded_patents.pop(i - 1)
     
     print("Confirming every id is downloaded and unique... ", end="")
     for (i, patent) in progress:
-        next_certificate = int(patent["certificate_id"])
+        next_certificate = patent["certificate_id"]
         if i != next_certificate:
             raise ValueError(f"Error at id={i}")
     print("Done!")
@@ -98,7 +98,7 @@ def fix_patents_list(downloaded_patents : list, languge : str):
 
 def get_ICID_json(language : str):
     print("Downloading every entry with ICID")
-    certificate_ids = {
+    content = {
         "parsing_date": datetime.date.today().isoformat(),
         "entries": 0,
         "icid_code_groups": []
@@ -108,18 +108,18 @@ def get_ICID_json(language : str):
         progress.set_description(icid_code)
         group = get_group_by_icid_code(icid_code=icid_code, language=language)
         if group['data']:
-            certificate_ids["entries"] += len(group["data"])
-            certificate_ids['icid_code_groups'].append(group)
+            content["entries"] += len(group["data"])
+            content['icid_code_groups'].append(group)
     
     with open("./data/" + language + "/ICID.json", "w", encoding='utf-8') as f:
-        f.write(json.dumps(certificate_ids, ensure_ascii=False))
+        f.write(json.dumps(content, ensure_ascii=False))
 
 
 def get_all_patents(language : str):
     path = "./data/" + language + "/"
     try:
         with open(path + "ICID.json", "r", encoding='utf-8') as f:
-            certificate_ids = json.load(f)
+            content = json.load(f)
     except FileNotFoundError:
         print(f"Missing {path + "ICID.json"}\nDo you want to get it? [y/n]")
         if input(">>>").strip().lower() == "y":
@@ -128,15 +128,15 @@ def get_all_patents(language : str):
             return
 
         with open(path + "ICID.json", "r", encoding='utf-8') as f:
-            certificate_ids = json.load(f)
+            content = json.load(f)
              
     ready_patents = []
-    for group in certificate_ids["icid_code_groups"]:
+    for group in content["icid_code_groups"]:
         for patent in group["data"]:
             ready_patents.append(patent)
     
     all_patents = fix_patents_list(ready_patents, languge=language)
-    print(f"Every patent up to {certificate_ids["parsing_date"]} is succesfully downloaded in {path}patents.json")
+    print(f"Every patent up to {content["parsing_date"]} is succesfully downloaded in {path}patents.json")
     print(f"In total: {all_patents[-1]["certificate_id"]} unique patents")
 
     with open(path + "patents.json", "w", encoding='utf-8') as f:
