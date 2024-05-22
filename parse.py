@@ -1,4 +1,4 @@
-from utils import get_ICID_json, get_all_patents
+from utils import get_ICID_json, get_all_patents, get_all_info
 
 
 def main():
@@ -12,6 +12,7 @@ def main():
     print("What do you want to do?")
     print("1: Get only ICID.json (patents with ICID id)")
     print("2: Get all patents in patents.json (will require step one done)")
+    print("3: Go through each patent and extract all information available")
     match int(input(">>>")):
         case 1:
             for language in query:
@@ -19,6 +20,9 @@ def main():
         case 2:
             for language in query:
                 get_all_patents(language)
+        case 3:
+            for language in query:
+                get_all_info(language)
         case _:
             print("No such option")
 
