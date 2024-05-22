@@ -17,8 +17,9 @@ Other than that, you should have these 2 files in the same directory:
 - main.py
 - aipoparser.py
 
-`aipoparser` can be used as a module
-This file is compiled manually and consists of every ICID code from [this website](https://locpub.wipo.int/enfr/?class_number=1&explanatory_notes=hide&id_numbers=hide&lang=en&menulang=en&mode=loc&notion=&version=20250101), it greatly helps with parsing efficiency
+`aipoparser` can be used as a module on its own.
+
+This file (ICID codes.json) is compiled manually and consists of every ICID code from [this website](https://locpub.wipo.int/enfr/?class_number=1&explanatory_notes=hide&id_numbers=hide&lang=en&menulang=en&mode=loc&notion=&version=20250101), it greatly helps with parsing efficiency
 - data/
   - ICID codes.json
 
