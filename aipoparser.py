@@ -163,13 +163,8 @@ def get_all_patents(language : str):
         f.write(json.dumps(all_patents, ensure_ascii=False, indent=4))
 
 def get_all_info_for_patent(patent : dict):
-    soup = BeautifulSoup(
-        requests.request(
-            method="get",
-            url=patent["patent_link"]
-        ).text, 
-        features="html.parser"
-    )
+    response = requests.request(method="get", url=patent["patent_link"])
+    soup = BeautifulSoup(response.text, features="html.parser")
     captions_map = {
         "(11)": "id",
         "(13)": "document_view_code",
@@ -205,6 +200,7 @@ def get_all_info_for_patent(patent : dict):
             if "images" not in info:
                 info["images"] = list()
             info["images"].append("https://old.aipa.am" + p.img["src"])
+    info["url"] = response.url
 
     return info
 
