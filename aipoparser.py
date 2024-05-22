@@ -116,7 +116,7 @@ def fix_patents_list(downloaded_patents : list, languge : str):
     return downloaded_patents
 
 def get_ICID_json(language : str):
-    print("Downloading every entry with ICID")
+    print("Downloading every entry with ICID for", language, "language")
     content = {
         "parsing_date": datetime.date.today().isoformat(),
         "entries": 0,
@@ -154,6 +154,7 @@ def get_all_patents(language : str):
         for patent in group["data"]:
             ready_patents.append(patent)
     
+    print("ICID.json parsed, fixing patents for", language, "language")
     all_patents = fix_patents_list(ready_patents, languge=language)
     print(f"Every patent up to {content["parsing_date"]} is succesfully downloaded in {path}patents.json")
     print(f"In total: {all_patents[-1]["certificate_id"]} unique patents")
@@ -220,6 +221,7 @@ def get_all_info(language : str):
         with open(path + "patents.json", "r", encoding='utf-8') as f:
             content = json.load(f)
     
+    print("Extracting detailed info for every patent,", language, "language")
     all_info = list()
     try:
         progress = tqdm(content)
