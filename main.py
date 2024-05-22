@@ -1,4 +1,4 @@
-from utils import get_ICID_json, get_all_patents, get_all_info
+from aipoparser import get_ICID_json, get_all_patents, get_all_info
 
 
 def main():
