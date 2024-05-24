@@ -1,7 +1,7 @@
 # Armenian patents data
 This is a dataset of armenian patents, parsed from [AIPO website](https://aipo.am/en/search-int-classification), as well as code which generates it.
 This project is dedicated to [@opendataam](https://github.com/opendataam) team, specifically [this task](https://github.com/opendataam/opendatam-tasks/issues/26).
-It's actively in development, so expect things to break.
+It's not in development right now, and there might be some bugs.
 
 ## Setup
 Virtual environment is planned, but not supported right now, so you will need an environment which supports these dependencies, with python version being at least 3.10 (3.12 is recommended):
@@ -9,6 +9,7 @@ Virtual environment is planned, but not supported right now, so you will need an
 import itertools
 import json
 import datetime
+from pathlib import Path
 import requests
 from bs4 import BeautifulSoup
 from tqdm import tqdm
